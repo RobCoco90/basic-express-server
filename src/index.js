@@ -1,14 +1,17 @@
-const cors = require('cors');
-const bodyParser = require('body-parser');
-const express = require('express');
-const routes = require('./routes');
-const dotenv = require('dotenv');
+import cors from 'cors';
+import bodyParser from 'body-parser';
+import express from 'express';
+import indexRouter from './routes/index';
+import usersRouter from './routes/users';
+import cookieParser from 'cookie-parser';
+import dotenv from 'dotenv';
 dotenv.config();
 
 const app = express();
 
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: false}));
+app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
 app.use(cors());
 
 app.use(function (req, res, next) {
@@ -16,8 +19,10 @@ app.use(function (req, res, next) {
   next()
 })
 
-app.use('/', routes);
+app.use('/', indexRouter);
+app.use('/users', usersRouter);
 
+/* eslint-disable */
 app.listen(process.env.PORT, () =>
   console.log(`App listening on port ${process.env.PORT}!`),
 );
